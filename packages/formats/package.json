@@ -1,0 +1,21 @@
+{
+  "name": "@darkages/formats",
+  "description": "Darkages file format parsers",
+  "keywords": [
+    "darkages"
+  ],
+  "version": "0.1.0",
+  "license": "MIT",
+  "repository": "crohlfs/darkages",
+  "main": "lib/index.js",
+  "module": "lib/index.es.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/"
+  ],
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "build": "rollup -c",
+    "watch": "rollup -cw"
+  }
+}

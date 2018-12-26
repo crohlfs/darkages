@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "build": "lerna run build",
+    "watch": "lerna run watch"
+  },
+  "devDependencies": {
+    "lerna": "^3.8.0",
+    "rollup": "^0.68.2",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-typescript2": "^0.18.1",
+    "typescript": "^3.2.2"
+  }
+}
