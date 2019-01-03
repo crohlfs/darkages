@@ -1,8 +1,9 @@
 import resolve from "rollup-plugin-node-resolve";
-import typescript from "rollup-plugin-typescript2";
+import babel from "rollup-plugin-babel";
+import dts from "rollup-plugin-dts";
 
-export default pkg => ({
-  input: "src/index.ts",
+export default (input, pkg) => ({
+  input,
   output: [
     {
       file: pkg.main,
@@ -17,5 +18,8 @@ export default pkg => ({
     ...Object.keys(pkg.dependencies || {}),
     ...Object.keys(pkg.peerDependencies || {})
   ],
-  plugins: [resolve({ extensions: [".ts"] }), typescript()]
+  plugins: [
+    resolve({ extensions: [".ts"] }),
+    babel({ extensions: [".js", ".ts"] })
+  ]
 });

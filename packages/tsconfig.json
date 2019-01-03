@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [
+    { "path": "binary-builder" },
+    { "path": "formats" },
+    { "path": "packets" }
+  ]
+}

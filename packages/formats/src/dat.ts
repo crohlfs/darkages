@@ -1,7 +1,6 @@
 export interface FileEntry {
-  name: string;
-  offset: number;
-  size: number;
+  o: number;
+  s: number;
 }
 
 export interface FileMap {
@@ -32,8 +31,8 @@ export function list(buffer: Buffer) {
     }
 
     if (lastOffset != -1) {
-      const size = offset - lastOffset;
-      files[lastName] = { name: lastName, offset: lastOffset, size };
+      const s = offset - lastOffset;
+      files[lastName] = { o: lastOffset, s };
     }
 
     lastOffset = offset;
