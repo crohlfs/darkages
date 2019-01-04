@@ -6,7 +6,9 @@ module.exports = function(api) {
     plugins: ["@babel/plugin-proposal-class-properties"]
   };
 
-  config.plugins.push("@babel/plugin-transform-modules-commonjs");
+  if (process.env.NODE_ENV === "test") {
+    config.plugins.push("@babel/plugin-transform-modules-commonjs");
+  }
 
   return config;
 };
