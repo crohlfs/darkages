@@ -11,12 +11,12 @@
   "module": "lib/index.es.js",
   "types": "lib/index.d.ts",
   "files": [
-    "lib/"
+    "lib/client"
   ],
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
-    "build": "rollup -c",
-    "watch": "rollup -cw"
+    "build": "tsc",
+    "watch": "tsc -w"
   },
   "dependencies": {
     "@darkages/binary-blocks": "^0.1.0"

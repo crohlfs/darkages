@@ -22,7 +22,7 @@
     "lerna": "^3.8.0",
     "rollup": "^0.68.2",
     "rollup-plugin-babel": "^4.1.0",
-    "rollup-plugin-dts": "^0.7.0",
+    "rollup-plugin-multi-entry": "^2.1.0",
     "rollup-plugin-node-resolve": "^4.0.0",
     "typescript": "^3.2.2"
   },

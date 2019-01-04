@@ -1,4 +1,4 @@
-type ValueParser<Value> = (
+export type ValueParser<Value> = (
   context: Context
 ) => {
   get: string;
@@ -191,7 +191,7 @@ ${writerParser.put}
   };
 }
 
-interface Context {
+export interface Context {
   output: string;
   input: string;
   availableVariables: string[];
@@ -282,7 +282,7 @@ ${context.output}
 const ${lengthVariable} = ${context.input}.length;
 ${setLength}
 const ${outputTempVariable}
-  = new TextEncoder("${encoding}").encode(${context.input});
+  = Buffer.from(${context.input}, "ascii");
 
 data.set(${outputTempVariable}, offset);
 offset += ${context.input}.length;

@@ -1,4 +1,4 @@
-import { TextDecoder, TextEncoder } from "util";
+import { TextDecoder } from "util";
 import {
   compile,
   record,
@@ -21,7 +21,7 @@ import {
   writeOnly
 } from "../src";
 
-Object.assign(global, { TextEncoder, TextDecoder });
+Object.assign(global, { TextDecoder });
 
 test("simple uint8", () => {
   const { generate, parse } = compile(record(field("id", uint8)));
@@ -172,8 +172,8 @@ test("complex", () => {
       field("port", uint16be),
       skip(),
       field("seed", uint8),
-      field("key", string(uint8, "windows-949")),
-      field("name", string(uint8, "windows-949")),
+      field("key", string(uint8, "euc-kr")),
+      field("name", string(uint8, "euc-kr")),
       field("id", uint32le)
     )
   );

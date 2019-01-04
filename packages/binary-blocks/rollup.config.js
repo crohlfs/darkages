@@ -1,3 +1,7 @@
 import pkg from "./package.json";
-import baseConfig from "../../rollup.config";
-export default baseConfig("src/index.ts", pkg);
+import createConfig from "../../rollup.config";
+
+export default createConfig(pkg, base => ({
+  ...base,
+  input: "src/index.ts"
+}));

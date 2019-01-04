@@ -1,16 +1,19 @@
 import {
+  compile,
   record,
   field,
-  array,
   uint8,
+  transform,
+  array,
   uint16be,
   skip,
-  string,
-  uint32le,
-  transform,
-  compile
+  uint32be
 } from "@darkages/binary-blocks";
+import { string8 } from "../shared";
 
+/**
+ * Packet ID 0x03
+ */
 export default compile(
   record(
     field(
@@ -31,8 +34,8 @@ export default compile(
     field("port", uint16be),
     skip(),
     field("seed", uint8),
-    field("key", string(uint8, "windows-949")),
-    field("name", string(uint8, "windows-949")),
-    field("id", uint32le)
+    field("key", array({ of: uint8, length: uint8 })),
+    field("name", string8),
+    field("id", uint32be)
   )
 );
