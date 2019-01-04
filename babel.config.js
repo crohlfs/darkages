@@ -1,8 +1,12 @@
 module.exports = function(api) {
   api.cache(true);
 
-  return {
+  const config = {
     presets: ["@babel/preset-typescript"],
     plugins: ["@babel/plugin-proposal-class-properties"]
   };
+
+  config.plugins.push("@babel/plugin-transform-modules-commonjs");
+
+  return config;
 };

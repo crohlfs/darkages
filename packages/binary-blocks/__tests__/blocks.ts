@@ -17,7 +17,8 @@ import {
   int32le,
   string,
   boolean,
-  skip
+  skip,
+  writeOnly
 } from "../src";
 
 Object.assign(global, { TextEncoder, TextDecoder });
@@ -240,4 +241,13 @@ test("nested records", () => {
       secondChild: { id: 12 }
     }).toString()
   ).toEqual("10,12");
+});
+
+test("writeOnly", () => {
+  const { generate, parse } = compile(
+    record(writeOnly(uint16be, 3121), field("good", boolean))
+  );
+
+  expect(parse(new Uint8Array([0, 0, 1]))).toEqual({ good: true });
+  expect(generate({ good: true }).toString()).toEqual("12,49,1");
 });

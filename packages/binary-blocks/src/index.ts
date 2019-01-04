@@ -165,6 +165,32 @@ export function skip(bytesToSkip = 1): ValueParser<{}> {
   });
 }
 
+export function writeOnly<V extends string | number>(
+  writer: ValueParser<V>,
+  value: V
+): ValueParser<{}> {
+  return context => {
+    const throwawayVariable = context.availableVariables.shift()!;
+
+    const writerParser = writer({
+      ...context,
+      input: throwawayVariable,
+      output: throwawayVariable
+    });
+
+    return {
+      get: `
+let ${throwawayVariable};
+${writerParser.get}
+`,
+      put: `
+const ${throwawayVariable} = ${JSON.stringify(value)};
+${writerParser.put}
+`
+    };
+  };
+}
+
 interface Context {
   output: string;
   input: string;
@@ -360,6 +386,27 @@ export function record<V1, V2, V3, V4, V5, V6, V7>(
   field6: ValueParser<V6>,
   field7: ValueParser<V7>
 ): ValueParser<V1 & V2 & V3 & V4 & V5 & V6 & V7>;
+export function record<V1, V2, V3, V4, V5, V6, V7, V8>(
+  field1: ValueParser<V1>,
+  field2: ValueParser<V2>,
+  field3: ValueParser<V3>,
+  field4: ValueParser<V4>,
+  field5: ValueParser<V5>,
+  field6: ValueParser<V6>,
+  field7: ValueParser<V7>,
+  field8: ValueParser<V8>
+): ValueParser<V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8>;
+export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9>(
+  field1: ValueParser<V1>,
+  field2: ValueParser<V2>,
+  field3: ValueParser<V3>,
+  field4: ValueParser<V4>,
+  field5: ValueParser<V5>,
+  field6: ValueParser<V6>,
+  field7: ValueParser<V7>,
+  field8: ValueParser<V8>,
+  field9: ValueParser<V9>
+): ValueParser<V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9>;
 export function record(...fields: ValueParser<any>[]) {
   return (context: Context) =>
     fields.reduce(
@@ -382,7 +429,7 @@ export function compile<Shape>(objectParser: ValueParser<Shape>) {
   });
 
   let parse;
-  let generate;
+  let generateTo: (offset: number, data: Uint8Array, obj: Shape) => number;
 
   const parseFuncBody = `
   let offset = 0;
@@ -399,16 +446,12 @@ export function compile<Shape>(objectParser: ValueParser<Shape>) {
   }
 
   const generateFuncBody = `
-let offset = 0;
-let data = new Uint8Array(2048);
 ${builtParser.put}
-return data.subarray(0, offset);
+return offset;
   `;
 
   try {
-    generate = new Function("obj", generateFuncBody) as (
-      obj: Shape
-    ) => Uint8Array;
+    generateTo = new Function("offset", "data", "obj", generateFuncBody) as any;
   } catch (ex) {
     console.info(parseFuncBody);
     throw ex;
@@ -416,6 +459,12 @@ return data.subarray(0, offset);
 
   return {
     parse,
-    generate
+    generate: (obj: Shape) => {
+      let offset = 0;
+      let data = new Uint8Array(2048);
+      offset = generateTo(offset, data, obj);
+      return data.subarray(0, offset);
+    },
+    generateTo
   };
 }
