@@ -15,17 +15,18 @@ export default compile(
   record(
     field(
       "ip",
-      transform(array({ of: uint8, length: 4 }), {
-        in: function(bytes) {
+      transform(
+        array({ of: uint8, length: 4 }),
+        function(bytes) {
           return bytes.reverse().join(".");
         },
-        out: function(ipAddress: string) {
+        function(ipAddress) {
           return ipAddress
             .split(".")
             .reverse()
             .map(parseFloat);
         }
-      })
+      )
     ),
     field("port", uint16be),
     skip(),

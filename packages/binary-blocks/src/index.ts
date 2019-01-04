@@ -294,9 +294,10 @@ offset += ${context.input}.length;
     };
   }) as ValueParser<string>;
 
-export const transform = <From, To>(
-  v: ValueParser<From>,
-  transformer: { in: (val: From) => To; out: (val: To) => From }
+export const transform = <Input, Output>(
+  v: ValueParser<Input>,
+  to: (val: Input) => Output,
+  from: (val: Output) => Input
 ) =>
   (context => {
     const valueVariable = context.availableVariables.shift()!;
@@ -310,12 +311,12 @@ export const transform = <From, To>(
     const get = `
 let ${valueVariable};
 ${valueParser.get}
-${setupTransformFunction(transformer.in, valueVariable, context.output)}
+${setupTransformFunction(to, valueVariable, context.output)}
 `;
 
     const put = `
 let ${valueVariable};
-${setupTransformFunction(transformer.out, context.input, valueVariable)}
+${setupTransformFunction(from, context.input, valueVariable)}
 ${valueParser.put}
 `;
 
@@ -323,7 +324,7 @@ ${valueParser.put}
       get,
       put
     };
-  }) as ValueParser<To>;
+  }) as ValueParser<Output>;
 
 export function field<N extends string, V extends string | number | boolean>(
   name: N,

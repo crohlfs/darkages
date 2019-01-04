@@ -62,14 +62,15 @@ test("transformed array", () => {
     record(
       field(
         "id",
-        transform(array({ of: uint8, length: 4 }), {
-          in: function(val) {
+        transform(
+          array({ of: uint8, length: 4 }),
+          function(val) {
             return val.join("-");
           },
-          out: function(val: string) {
+          function(val: string) {
             return val.split("-").map(parseFloat);
           }
-        })
+        )
       )
     )
   );
@@ -155,17 +156,18 @@ test("complex", () => {
     record(
       field(
         "ip",
-        transform(array({ length: 4, of: uint8 }), {
-          in: function(val: number[]) {
+        transform(
+          array({ length: 4, of: uint8 }),
+          function(val: number[]) {
             return val.reverse().join(".");
           },
-          out: function(val: string) {
+          function(val: string) {
             return val
               .split(".")
               .reverse()
               .map(parseFloat);
           }
-        })
+        )
       ),
       field("port", uint16be),
       skip(),
