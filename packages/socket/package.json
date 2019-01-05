@@ -1,6 +1,7 @@
 {
-  "name": "@darkages/formats",
-  "description": "Darkages file format parsers",
+  "name": "@darkages/socket",
+  "sideEffects": false,
+  "description": "Darkages socket",
   "keywords": [
     "darkages"
   ],
@@ -11,7 +12,7 @@
   "module": "lib/index.es.js",
   "types": "lib/index.d.ts",
   "files": [
-    "lib/"
+    "lib"
   ],
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
