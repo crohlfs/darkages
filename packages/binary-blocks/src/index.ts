@@ -34,7 +34,7 @@ function setupTransformFunction(
   const [valueArg] = getArgs(funcString);
 
   const val = getFunctionBody(funcString)
-    .replace(new RegExp(`\\b${valueArg}\\b`), argName)
+    .replace(new RegExp(`\\b${valueArg}\\b`, "g"), argName)
     .replace("return", returnName + " =");
 
   return val;

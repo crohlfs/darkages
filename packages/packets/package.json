@@ -1,5 +1,6 @@
 {
   "name": "@darkages/packets",
+  "sideEffects": false,
   "description": "Darkages packets",
   "keywords": [
     "darkages"
@@ -11,12 +12,12 @@
   "module": "lib/index.es.js",
   "types": "lib/index.d.ts",
   "files": [
-    "lib/client"
+    "lib"
   ],
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
-    "build": "tsc",
-    "watch": "tsc -w"
+    "build": "rollup -c",
+    "watch": "rollup -cw"
   },
   "dependencies": {
     "@darkages/binary-blocks": "^0.1.0"

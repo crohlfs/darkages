@@ -2,8 +2,7 @@
   "extends": "../tsconfig.settings.json",
   "compilerOptions": {
     "outDir": "lib",
-    "rootDir": "src",
-    "emitDeclarationOnly": false
+    "rootDir": "src"
   },
   "references": [{ "path": "../binary-blocks" }]
 }

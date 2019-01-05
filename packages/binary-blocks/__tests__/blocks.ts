@@ -67,7 +67,7 @@ test("transformed array", () => {
           function(val) {
             return val.join("-");
           },
-          function(val: string) {
+          function(val) {
             return val.split("-").map(parseFloat);
           }
         )
@@ -158,10 +158,10 @@ test("complex", () => {
         "ip",
         transform(
           array({ length: 4, of: uint8 }),
-          function(val: number[]) {
+          function(val) {
             return val.reverse().join(".");
           },
-          function(val: string) {
+          function(val) {
             return val
               .split(".")
               .reverse()
@@ -252,4 +252,38 @@ test("writeOnly", () => {
 
   expect(parse(new Uint8Array([0, 0, 1]))).toEqual({ good: true });
   expect(generate({ good: true }).toString()).toEqual("12,49,1");
+});
+
+test("direction", () => {
+  const { generate, parse } = compile(
+    record(
+      field(
+        "direction",
+        transform(
+          uint8,
+          function(value) {
+            return value === 0
+              ? "up"
+              : value === 1
+              ? "right"
+              : value === 2
+              ? "down"
+              : "left";
+          },
+          function(dir) {
+            return dir === "up"
+              ? 0
+              : dir === "right"
+              ? 1
+              : dir === "down"
+              ? 2
+              : 3;
+          }
+        )
+      )
+    )
+  );
+
+  expect(parse(new Uint8Array([2]))).toEqual({ direction: "down" });
+  expect(generate({ direction: "left" }).toString()).toEqual("3");
 });
