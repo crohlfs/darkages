@@ -1,3 +1,4 @@
+export { default as addEquippedItem } from "./addEquippedItem";
 export { default as addInventoryItem } from "./addInventoryItem";
 export { default as addSkill } from "./addSkill";
 export { default as addSpell } from "./addSpell";
@@ -20,8 +21,10 @@ export { default as removeSkill } from "./removeSkill";
 export { default as removeSpell } from "./removeSpell";
 export { default as serverListData } from "./serverListData";
 export { default as setEntityDirection } from "./setEntityDirection";
+export { default as setPlayerEntityId } from "./setPlayerEntityId";
 export { default as setLocation } from "./setLocation";
 export { default as showAnimation } from "./showAnimation";
+export { default as showDialog } from "./showDialog";
 export { default as showHealthBar } from "./showHealthBar";
 export { default as systemMessage } from "./systemMessage";
 export { default as tickHeartbeatRequest } from "./tickHeartbeatRequest";

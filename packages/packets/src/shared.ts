@@ -1,4 +1,4 @@
-import { string, uint8 } from "@darkages/binary-blocks";
+import { string, uint8, transform } from "@darkages/binary-blocks";
 
 export function build<Shape>(
   parse: (data: Uint8Array) => Shape,
@@ -13,3 +13,19 @@ export const emptyPacketStructure = {
   parse: () => ({}),
   generate: () => new Uint8Array()
 };
+
+export const direction = transform(
+  uint8,
+  function(value) {
+    return value === 0
+      ? "up"
+      : value === 1
+      ? "right"
+      : value === 2
+      ? "down"
+      : "left";
+  },
+  function(dir) {
+    return dir === "up" ? 0 : dir === "right" ? 1 : dir === "down" ? 2 : 3;
+  }
+);
