@@ -5,8 +5,6 @@ import {
   uint16be,
   uint32be,
   uint8,
-  writeOnly,
-  skip,
   boolean
 } from "@darkages/binary-blocks";
 import { direction, string8 } from "../shared";
