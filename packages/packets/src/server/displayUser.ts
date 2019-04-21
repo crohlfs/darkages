@@ -10,7 +10,7 @@ import { direction } from "../shared";
 /**
  * Packet ID 0x33
  */
-export default compile(
+const displayUser = compile(
   record(
     field("x", uint16be),
     field("y", uint16be),
@@ -19,3 +19,7 @@ export default compile(
     field("helmet", uint16be)
   )
 );
+
+export default displayUser;
+
+export type DisplayUser = ReturnType<typeof displayUser.parse>;

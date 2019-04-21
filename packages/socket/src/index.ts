@@ -1,38 +1,53 @@
 // copying this https://github.com/mozilla/libdweb#tcpsocket-api
 import { Socket, SocketConnectOpts } from "net";
+const BufferCollection = require("buffer-collection");
+
+const HEADER_SIZE = 3;
 
 export default class DarkagesSocket {
-  private readHandler?: {
-    promise: Promise<Buffer>;
-    resolve: (socket: Buffer) => void;
-    reject: () => void;
-  };
-
-  buffer: Buffer | null = null;
+  socket: Socket;
+  queue: Uint8Array[] = [];
+  callback?: (buffer: Uint8Array) => void;
 
   constructor(socket: Socket) {
-    socket.on("data", data => {
-      if (!this.buffer) {
-        this.buffer = data;
+    this.socket = socket;
+
+    const handlePayload = (buffer: Uint8Array) => {
+      if (this.callback) {
+        this.callback(buffer);
+        this.callback = undefined;
       } else {
-        this.buffer = Buffer.concat([this.buffer, data]);
+        this.queue.push(buffer);
+      }
+    };
+
+    let buffers = new BufferCollection();
+
+    function tryTakePacketFromBuffers() {
+      if (buffers.readUInt8(0) != 0xaa) {
+        console.error("Bad packet");
       }
 
-      this.consumeBuffer();
+      const payloadSize = buffers.readUInt16BE(1);
+      const packetSize = payloadSize + HEADER_SIZE;
+
+      if (buffers.length == packetSize) {
+        const buff = buffers.shiftBuffer();
+        handlePayload(buff.subarray(HEADER_SIZE));
+      } else if (buffers.length > packetSize) {
+        handlePayload(
+          buffers.slice(HEADER_SIZE, packetSize - 1 - HEADER_SIZE).toBuffer()
+        );
+        buffers = buffers.slice(packetSize);
+        tryTakePacketFromBuffers();
+      }
+    }
+
+    socket.on("data", data => {
+      buffers.push(data);
+      tryTakePacketFromBuffers();
     });
-
-    socket.on("close", () => {
-      //TODO: Make this reject after awaiting a packet while the socket is closed
-
-      if (!this.readHandler) return;
-
-      this.readHandler.reject();
-    });
-
-    this.writeBuffer = (buffer, resolve) => socket.write(buffer, resolve);
   }
-
-  private writeBuffer: (buffer: Buffer, cb: () => void) => boolean;
 
   static connect(opts: SocketConnectOpts) {
     var socket = new Socket();
@@ -48,52 +63,26 @@ export default class DarkagesSocket {
   }
 
   read() {
-    if (this.readHandler) return this.readHandler.promise;
+    const existing = this.queue.shift();
 
-    var promise = new Promise<Buffer>((resolve, reject) => {
-      this.readHandler = {
-        promise,
-        resolve,
-        reject
-      };
-
-      this.consumeBuffer();
-    });
-
-    return promise;
+    if (existing) {
+      return Promise.resolve(existing);
+    } else {
+      return new Promise<Uint8Array>(resolve => {
+        this.callback = resolve;
+      });
+    }
   }
 
   write(data: Uint8Array) {
     return new Promise<void>(resolve => {
-      this.writeBuffer(
+      this.socket.write(
         Buffer.concat(
-          [Uint8Array.from([0xaa, data.length >> 8, data.length & 255]), data],
+          [Uint8Array.from([0xaa, data.length >> 8, data.length]), data],
           data.length + 3
         ),
         resolve
       );
     });
-  }
-
-  private consumeBuffer() {
-    let payloadSize: number;
-    while (
-      this.readHandler &&
-      this.buffer &&
-      (payloadSize = this.buffer.readUInt16BE(1)) <= this.buffer.length - 3
-    ) {
-      const endIndex = payloadSize + 3;
-      const payload = this.buffer.slice(3, endIndex);
-
-      const nextIndex = endIndex;
-
-      this.buffer =
-        this.buffer.length === nextIndex ? null : this.buffer.slice(nextIndex);
-
-      const resolve = this.readHandler.resolve;
-
-      this.readHandler = undefined;
-      resolve(payload);
-    }
   }
 }
