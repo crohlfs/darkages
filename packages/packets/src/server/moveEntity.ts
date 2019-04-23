@@ -2,7 +2,6 @@ import {
   compile,
   record,
   field,
-  uint8,
   uint16be,
   uint32be,
   skip
