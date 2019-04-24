@@ -29,3 +29,4 @@ export { default as pickupItem } from "./pickupItem";
 export { default as whisper } from "./whisper";
 export { default as dropGold } from "./dropGold";
 export { default as refresh } from "./refresh";
+export { default as requestMap } from "./requestMap";

@@ -4,7 +4,6 @@ import {
   field,
   uint8,
   uint16be,
-  uint16le,
   transform
 } from "@darkages/binary-blocks";
 import { string8 } from "../shared";
@@ -21,7 +20,7 @@ export default compile(
       field("flags", uint8),
       field("widthHigh", uint8),
       field("heightHigh", uint8),
-      field("checksum", uint16le),
+      field("checksum", uint16be),
       field("name", string8)
     ),
     function(val) {
