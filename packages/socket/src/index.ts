@@ -35,9 +35,7 @@ export default class DarkagesSocket {
         const buff = buffers.shiftBuffer();
         handlePayload(buff.subarray(HEADER_SIZE));
       } else if (buffers.length > packetSize) {
-        handlePayload(
-          buffers.slice(HEADER_SIZE, packetSize - 1 - HEADER_SIZE).toBuffer()
-        );
+        handlePayload(buffers.slice(HEADER_SIZE, packetSize).toBuffer());
         buffers = buffers.slice(packetSize);
         tryTakePacketFromBuffers();
       }
