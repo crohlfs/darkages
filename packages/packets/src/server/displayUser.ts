@@ -68,5 +68,3 @@ const displayUser = compile(
 );
 
 export default displayUser;
-
-export type DisplayUser = ReturnType<typeof displayUser.parse>;
