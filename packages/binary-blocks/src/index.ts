@@ -64,11 +64,11 @@ const createUintParser = (
   const put = `
 let ${valueVariable} = ${context.input};
 ${keys
-      .map(
-        i => `data[offset${i > 0 ? ` + ${i}` : ""}] = ${valueVariable};
+  .map(
+    i => `data[offset${i > 0 ? ` + ${i}` : ""}] = ${valueVariable};
 ${valueVariable} = ${valueVariable} >>> 8;`
-      )
-      .join("\r\n")}
+  )
+  .join("\r\n")}
 offset += ${bytes};`;
 
   return {
@@ -100,8 +100,8 @@ export const int8: ValueParser<number> = context => {
     get: `
   const ${valueVariable} = data[offset++];
   ${
-      context.output
-      } = ${valueVariable} | (${valueVariable} & 2 ** 7) * 0x1fffffe;`,
+    context.output
+  } = ${valueVariable} | (${valueVariable} & 2 ** 7) * 0x1fffffe;`,
     put: uintParser.put
   };
 };
@@ -136,7 +136,7 @@ export const int32be: ValueParser<number> = context => {
   return {
     get: `${
       context.output
-      } = (data[offset++] <<  24) + data[offset++] * 2 ** 16 + data[offset++] * 2 ** 8 + data[offset++];`,
+    } = (data[offset++] <<  24) + data[offset++] * 2 ** 16 + data[offset++] * 2 ** 8 + data[offset++];`,
     put: uintParser.put
   };
 };
@@ -147,7 +147,7 @@ export const int32le: ValueParser<number> = context => {
   return {
     get: `${
       context.output
-      } = data[offset++] + data[offset++] * 2 ** 8 + data[offset++] * 2 ** 16 + (data[offset++] <<  24);`,
+    } = data[offset++] + data[offset++] * 2 ** 8 + data[offset++] * 2 ** 16 + (data[offset++] <<  24);`,
     put: uintParser.put
   };
 };
@@ -220,7 +220,7 @@ export const array = <Value>(opts: {
 
     let lengthParser;
     if (typeof opts.length !== "number") {
-      lengthParser = opts.of({
+      lengthParser = opts.length({
         ...context,
         input: lengthVariable,
         output: lengthVariable
@@ -239,13 +239,13 @@ ${context.output} = ${arrayVariable}`;
 
     const put = `
 ${
-      lengthParser
-        ? `
+  lengthParser
+    ? `
 const ${lengthVariable} = ${context.input}.length;
 ${lengthParser.put}
 `
-        : ""
-      }
+    : ""
+}
 for (const ${itemVariable} of ${context.input}) {
   ${itemParser.put}
 }
@@ -342,9 +342,9 @@ export function field<N extends string, V>(
     typeof value === "function"
       ? value(addToContext(context, "." + name))
       : {
-        get: `${context.output}.${name} = ${JSON.stringify(value)};`,
-        put: ``
-      };
+          get: `${context.output}.${name} = ${JSON.stringify(value)};`,
+          put: ``
+        };
 }
 
 export function record<V1>(field1: ValueParser<V1>): ValueParser<V1>;
@@ -461,8 +461,25 @@ export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13>(
   field11: ValueParser<V11>,
   field12: ValueParser<V12>,
   field13: ValueParser<V13>
-): ValueParser<V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & V10 & V11 & V12 & V13>;
-export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14>(
+): ValueParser<
+  V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & V10 & V11 & V12 & V13
+>;
+export function record<
+  V1,
+  V2,
+  V3,
+  V4,
+  V5,
+  V6,
+  V7,
+  V8,
+  V9,
+  V10,
+  V11,
+  V12,
+  V13,
+  V14
+>(
   field1: ValueParser<V1>,
   field2: ValueParser<V2>,
   field3: ValueParser<V3>,
@@ -477,8 +494,26 @@ export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V
   field12: ValueParser<V12>,
   field13: ValueParser<V13>,
   field14: ValueParser<V14>
-): ValueParser<V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & V10 & V11 & V12 & V13 & V14>;
-export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15>(
+): ValueParser<
+  V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & V10 & V11 & V12 & V13 & V14
+>;
+export function record<
+  V1,
+  V2,
+  V3,
+  V4,
+  V5,
+  V6,
+  V7,
+  V8,
+  V9,
+  V10,
+  V11,
+  V12,
+  V13,
+  V14,
+  V15
+>(
   field1: ValueParser<V1>,
   field2: ValueParser<V2>,
   field3: ValueParser<V3>,
@@ -494,8 +529,27 @@ export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V
   field13: ValueParser<V13>,
   field14: ValueParser<V14>,
   field15: ValueParser<V15>
-): ValueParser<V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & V10 & V11 & V12 & V13 & V14 & V15>;
-export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16>(
+): ValueParser<
+  V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & V10 & V11 & V12 & V13 & V14 & V15
+>;
+export function record<
+  V1,
+  V2,
+  V3,
+  V4,
+  V5,
+  V6,
+  V7,
+  V8,
+  V9,
+  V10,
+  V11,
+  V12,
+  V13,
+  V14,
+  V15,
+  V16
+>(
   field1: ValueParser<V1>,
   field2: ValueParser<V2>,
   field3: ValueParser<V3>,
@@ -512,8 +566,43 @@ export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V
   field14: ValueParser<V14>,
   field15: ValueParser<V15>,
   field16: ValueParser<V16>
-): ValueParser<V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & V10 & V11 & V12 & V13 & V14 & V15 & V16>;
-export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17>(
+): ValueParser<
+  V1 &
+    V2 &
+    V3 &
+    V4 &
+    V5 &
+    V6 &
+    V7 &
+    V8 &
+    V9 &
+    V10 &
+    V11 &
+    V12 &
+    V13 &
+    V14 &
+    V15 &
+    V16
+>;
+export function record<
+  V1,
+  V2,
+  V3,
+  V4,
+  V5,
+  V6,
+  V7,
+  V8,
+  V9,
+  V10,
+  V11,
+  V12,
+  V13,
+  V14,
+  V15,
+  V16,
+  V17
+>(
   field1: ValueParser<V1>,
   field2: ValueParser<V2>,
   field3: ValueParser<V3>,
@@ -531,8 +620,45 @@ export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V
   field15: ValueParser<V15>,
   field16: ValueParser<V16>,
   field17: ValueParser<V17>
-): ValueParser<V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & V10 & V11 & V12 & V13 & V14 & V15 & V16 & V17>;
-export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17, V18>(
+): ValueParser<
+  V1 &
+    V2 &
+    V3 &
+    V4 &
+    V5 &
+    V6 &
+    V7 &
+    V8 &
+    V9 &
+    V10 &
+    V11 &
+    V12 &
+    V13 &
+    V14 &
+    V15 &
+    V16 &
+    V17
+>;
+export function record<
+  V1,
+  V2,
+  V3,
+  V4,
+  V5,
+  V6,
+  V7,
+  V8,
+  V9,
+  V10,
+  V11,
+  V12,
+  V13,
+  V14,
+  V15,
+  V16,
+  V17,
+  V18
+>(
   field1: ValueParser<V1>,
   field2: ValueParser<V2>,
   field3: ValueParser<V3>,
@@ -551,8 +677,47 @@ export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V
   field16: ValueParser<V16>,
   field17: ValueParser<V17>,
   field18: ValueParser<V18>
-): ValueParser<V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & V10 & V11 & V12 & V13 & V14 & V15 & V16 & V17 & V18>;
-export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17, V18, V19>(
+): ValueParser<
+  V1 &
+    V2 &
+    V3 &
+    V4 &
+    V5 &
+    V6 &
+    V7 &
+    V8 &
+    V9 &
+    V10 &
+    V11 &
+    V12 &
+    V13 &
+    V14 &
+    V15 &
+    V16 &
+    V17 &
+    V18
+>;
+export function record<
+  V1,
+  V2,
+  V3,
+  V4,
+  V5,
+  V6,
+  V7,
+  V8,
+  V9,
+  V10,
+  V11,
+  V12,
+  V13,
+  V14,
+  V15,
+  V16,
+  V17,
+  V18,
+  V19
+>(
   field1: ValueParser<V1>,
   field2: ValueParser<V2>,
   field3: ValueParser<V3>,
@@ -572,8 +737,49 @@ export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V
   field17: ValueParser<V17>,
   field18: ValueParser<V18>,
   field19: ValueParser<V19>
-): ValueParser<V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & V10 & V11 & V12 & V13 & V14 & V15 & V16 & V17 & V18 & V19>;
-export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17, V18, V19, V20>(
+): ValueParser<
+  V1 &
+    V2 &
+    V3 &
+    V4 &
+    V5 &
+    V6 &
+    V7 &
+    V8 &
+    V9 &
+    V10 &
+    V11 &
+    V12 &
+    V13 &
+    V14 &
+    V15 &
+    V16 &
+    V17 &
+    V18 &
+    V19
+>;
+export function record<
+  V1,
+  V2,
+  V3,
+  V4,
+  V5,
+  V6,
+  V7,
+  V8,
+  V9,
+  V10,
+  V11,
+  V12,
+  V13,
+  V14,
+  V15,
+  V16,
+  V17,
+  V18,
+  V19,
+  V20
+>(
   field1: ValueParser<V1>,
   field2: ValueParser<V2>,
   field3: ValueParser<V3>,
@@ -594,8 +800,51 @@ export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V
   field18: ValueParser<V18>,
   field19: ValueParser<V19>,
   field20: ValueParser<V20>
-): ValueParser<V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & V10 & V11 & V12 & V13 & V14 & V15 & V16 & V17 & V18 & V19 & V20>;
-export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17, V18, V19, V20, V21>(
+): ValueParser<
+  V1 &
+    V2 &
+    V3 &
+    V4 &
+    V5 &
+    V6 &
+    V7 &
+    V8 &
+    V9 &
+    V10 &
+    V11 &
+    V12 &
+    V13 &
+    V14 &
+    V15 &
+    V16 &
+    V17 &
+    V18 &
+    V19 &
+    V20
+>;
+export function record<
+  V1,
+  V2,
+  V3,
+  V4,
+  V5,
+  V6,
+  V7,
+  V8,
+  V9,
+  V10,
+  V11,
+  V12,
+  V13,
+  V14,
+  V15,
+  V16,
+  V17,
+  V18,
+  V19,
+  V20,
+  V21
+>(
   field1: ValueParser<V1>,
   field2: ValueParser<V2>,
   field3: ValueParser<V3>,
@@ -617,8 +866,53 @@ export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V
   field19: ValueParser<V19>,
   field20: ValueParser<V20>,
   field21: ValueParser<V21>
-): ValueParser<V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & V10 & V11 & V12 & V13 & V14 & V15 & V16 & V17 & V18 & V19 & V20 & V21>;
-export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17, V18, V19, V20, V21, V22>(
+): ValueParser<
+  V1 &
+    V2 &
+    V3 &
+    V4 &
+    V5 &
+    V6 &
+    V7 &
+    V8 &
+    V9 &
+    V10 &
+    V11 &
+    V12 &
+    V13 &
+    V14 &
+    V15 &
+    V16 &
+    V17 &
+    V18 &
+    V19 &
+    V20 &
+    V21
+>;
+export function record<
+  V1,
+  V2,
+  V3,
+  V4,
+  V5,
+  V6,
+  V7,
+  V8,
+  V9,
+  V10,
+  V11,
+  V12,
+  V13,
+  V14,
+  V15,
+  V16,
+  V17,
+  V18,
+  V19,
+  V20,
+  V21,
+  V22
+>(
   field1: ValueParser<V1>,
   field2: ValueParser<V2>,
   field3: ValueParser<V3>,
@@ -641,8 +935,55 @@ export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V
   field20: ValueParser<V20>,
   field21: ValueParser<V21>,
   field22: ValueParser<V22>
-): ValueParser<V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & V10 & V11 & V12 & V13 & V14 & V15 & V16 & V17 & V18 & V19 & V20 & V21 & V22>;
-export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17, V18, V19, V20, V21, V22, V23>(
+): ValueParser<
+  V1 &
+    V2 &
+    V3 &
+    V4 &
+    V5 &
+    V6 &
+    V7 &
+    V8 &
+    V9 &
+    V10 &
+    V11 &
+    V12 &
+    V13 &
+    V14 &
+    V15 &
+    V16 &
+    V17 &
+    V18 &
+    V19 &
+    V20 &
+    V21 &
+    V22
+>;
+export function record<
+  V1,
+  V2,
+  V3,
+  V4,
+  V5,
+  V6,
+  V7,
+  V8,
+  V9,
+  V10,
+  V11,
+  V12,
+  V13,
+  V14,
+  V15,
+  V16,
+  V17,
+  V18,
+  V19,
+  V20,
+  V21,
+  V22,
+  V23
+>(
   field1: ValueParser<V1>,
   field2: ValueParser<V2>,
   field3: ValueParser<V3>,
@@ -666,8 +1007,57 @@ export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V
   field21: ValueParser<V21>,
   field22: ValueParser<V22>,
   field23: ValueParser<V23>
-): ValueParser<V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & V10 & V11 & V12 & V13 & V14 & V15 & V16 & V17 & V18 & V19 & V20 & V21 & V22 & V23>;
-export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17, V18, V19, V20, V21, V22, V23, V24>(
+): ValueParser<
+  V1 &
+    V2 &
+    V3 &
+    V4 &
+    V5 &
+    V6 &
+    V7 &
+    V8 &
+    V9 &
+    V10 &
+    V11 &
+    V12 &
+    V13 &
+    V14 &
+    V15 &
+    V16 &
+    V17 &
+    V18 &
+    V19 &
+    V20 &
+    V21 &
+    V22 &
+    V23
+>;
+export function record<
+  V1,
+  V2,
+  V3,
+  V4,
+  V5,
+  V6,
+  V7,
+  V8,
+  V9,
+  V10,
+  V11,
+  V12,
+  V13,
+  V14,
+  V15,
+  V16,
+  V17,
+  V18,
+  V19,
+  V20,
+  V21,
+  V22,
+  V23,
+  V24
+>(
   field1: ValueParser<V1>,
   field2: ValueParser<V2>,
   field3: ValueParser<V3>,
@@ -692,8 +1082,59 @@ export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V
   field22: ValueParser<V22>,
   field23: ValueParser<V23>,
   field24: ValueParser<V24>
-): ValueParser<V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & V10 & V11 & V12 & V13 & V14 & V15 & V16 & V17 & V18 & V19 & V20 & V21 & V22 & V23 & V24>;
-export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17, V18, V19, V20, V21, V22, V23, V24, V25>(
+): ValueParser<
+  V1 &
+    V2 &
+    V3 &
+    V4 &
+    V5 &
+    V6 &
+    V7 &
+    V8 &
+    V9 &
+    V10 &
+    V11 &
+    V12 &
+    V13 &
+    V14 &
+    V15 &
+    V16 &
+    V17 &
+    V18 &
+    V19 &
+    V20 &
+    V21 &
+    V22 &
+    V23 &
+    V24
+>;
+export function record<
+  V1,
+  V2,
+  V3,
+  V4,
+  V5,
+  V6,
+  V7,
+  V8,
+  V9,
+  V10,
+  V11,
+  V12,
+  V13,
+  V14,
+  V15,
+  V16,
+  V17,
+  V18,
+  V19,
+  V20,
+  V21,
+  V22,
+  V23,
+  V24,
+  V25
+>(
   field1: ValueParser<V1>,
   field2: ValueParser<V2>,
   field3: ValueParser<V3>,
@@ -719,8 +1160,61 @@ export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V
   field23: ValueParser<V23>,
   field24: ValueParser<V24>,
   field25: ValueParser<V25>
-): ValueParser<V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & V10 & V11 & V12 & V13 & V14 & V15 & V16 & V17 & V18 & V19 & V20 & V21 & V22 & V23 & V24 & V25>;
-export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17, V18, V19, V20, V21, V22, V23, V24, V25, V26>(
+): ValueParser<
+  V1 &
+    V2 &
+    V3 &
+    V4 &
+    V5 &
+    V6 &
+    V7 &
+    V8 &
+    V9 &
+    V10 &
+    V11 &
+    V12 &
+    V13 &
+    V14 &
+    V15 &
+    V16 &
+    V17 &
+    V18 &
+    V19 &
+    V20 &
+    V21 &
+    V22 &
+    V23 &
+    V24 &
+    V25
+>;
+export function record<
+  V1,
+  V2,
+  V3,
+  V4,
+  V5,
+  V6,
+  V7,
+  V8,
+  V9,
+  V10,
+  V11,
+  V12,
+  V13,
+  V14,
+  V15,
+  V16,
+  V17,
+  V18,
+  V19,
+  V20,
+  V21,
+  V22,
+  V23,
+  V24,
+  V25,
+  V26
+>(
   field1: ValueParser<V1>,
   field2: ValueParser<V2>,
   field3: ValueParser<V3>,
@@ -747,8 +1241,63 @@ export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V
   field24: ValueParser<V24>,
   field25: ValueParser<V25>,
   field26: ValueParser<V26>
-): ValueParser<V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & V10 & V11 & V12 & V13 & V14 & V15 & V16 & V17 & V18 & V19 & V20 & V21 & V22 & V23 & V24 & V25 & V26>;
-export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17, V18, V19, V20, V21, V22, V23, V24, V25, V26, V27>(
+): ValueParser<
+  V1 &
+    V2 &
+    V3 &
+    V4 &
+    V5 &
+    V6 &
+    V7 &
+    V8 &
+    V9 &
+    V10 &
+    V11 &
+    V12 &
+    V13 &
+    V14 &
+    V15 &
+    V16 &
+    V17 &
+    V18 &
+    V19 &
+    V20 &
+    V21 &
+    V22 &
+    V23 &
+    V24 &
+    V25 &
+    V26
+>;
+export function record<
+  V1,
+  V2,
+  V3,
+  V4,
+  V5,
+  V6,
+  V7,
+  V8,
+  V9,
+  V10,
+  V11,
+  V12,
+  V13,
+  V14,
+  V15,
+  V16,
+  V17,
+  V18,
+  V19,
+  V20,
+  V21,
+  V22,
+  V23,
+  V24,
+  V25,
+  V26,
+  V27
+>(
   field1: ValueParser<V1>,
   field2: ValueParser<V2>,
   field3: ValueParser<V3>,
@@ -776,8 +1325,65 @@ export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V
   field25: ValueParser<V25>,
   field26: ValueParser<V26>,
   field27: ValueParser<V27>
-): ValueParser<V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & V10 & V11 & V12 & V13 & V14 & V15 & V16 & V17 & V18 & V19 & V20 & V21 & V22 & V23 & V24 & V25 & V26 & V27>;
-export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17, V18, V19, V20, V21, V22, V23, V24, V25, V26, V27, V28>(
+): ValueParser<
+  V1 &
+    V2 &
+    V3 &
+    V4 &
+    V5 &
+    V6 &
+    V7 &
+    V8 &
+    V9 &
+    V10 &
+    V11 &
+    V12 &
+    V13 &
+    V14 &
+    V15 &
+    V16 &
+    V17 &
+    V18 &
+    V19 &
+    V20 &
+    V21 &
+    V22 &
+    V23 &
+    V24 &
+    V25 &
+    V26 &
+    V27
+>;
+export function record<
+  V1,
+  V2,
+  V3,
+  V4,
+  V5,
+  V6,
+  V7,
+  V8,
+  V9,
+  V10,
+  V11,
+  V12,
+  V13,
+  V14,
+  V15,
+  V16,
+  V17,
+  V18,
+  V19,
+  V20,
+  V21,
+  V22,
+  V23,
+  V24,
+  V25,
+  V26,
+  V27,
+  V28
+>(
   field1: ValueParser<V1>,
   field2: ValueParser<V2>,
   field3: ValueParser<V3>,
@@ -806,8 +1412,67 @@ export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V
   field26: ValueParser<V26>,
   field27: ValueParser<V27>,
   field28: ValueParser<V28>
-): ValueParser<V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & V10 & V11 & V12 & V13 & V14 & V15 & V16 & V17 & V18 & V19 & V20 & V21 & V22 & V23 & V24 & V25 & V26 & V27 & V28>;
-export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17, V18, V19, V20, V21, V22, V23, V24, V25, V26, V27, V28, V29>(
+): ValueParser<
+  V1 &
+    V2 &
+    V3 &
+    V4 &
+    V5 &
+    V6 &
+    V7 &
+    V8 &
+    V9 &
+    V10 &
+    V11 &
+    V12 &
+    V13 &
+    V14 &
+    V15 &
+    V16 &
+    V17 &
+    V18 &
+    V19 &
+    V20 &
+    V21 &
+    V22 &
+    V23 &
+    V24 &
+    V25 &
+    V26 &
+    V27 &
+    V28
+>;
+export function record<
+  V1,
+  V2,
+  V3,
+  V4,
+  V5,
+  V6,
+  V7,
+  V8,
+  V9,
+  V10,
+  V11,
+  V12,
+  V13,
+  V14,
+  V15,
+  V16,
+  V17,
+  V18,
+  V19,
+  V20,
+  V21,
+  V22,
+  V23,
+  V24,
+  V25,
+  V26,
+  V27,
+  V28,
+  V29
+>(
   field1: ValueParser<V1>,
   field2: ValueParser<V2>,
   field3: ValueParser<V3>,
@@ -837,7 +1502,37 @@ export function record<V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V
   field27: ValueParser<V27>,
   field28: ValueParser<V28>,
   field29: ValueParser<V29>
-): ValueParser<V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 & V10 & V11 & V12 & V13 & V14 & V15 & V16 & V17 & V18 & V19 & V20 & V21 & V22 & V23 & V24 & V25 & V26 & V27 & V28 & V29>;
+): ValueParser<
+  V1 &
+    V2 &
+    V3 &
+    V4 &
+    V5 &
+    V6 &
+    V7 &
+    V8 &
+    V9 &
+    V10 &
+    V11 &
+    V12 &
+    V13 &
+    V14 &
+    V15 &
+    V16 &
+    V17 &
+    V18 &
+    V19 &
+    V20 &
+    V21 &
+    V22 &
+    V23 &
+    V24 &
+    V25 &
+    V26 &
+    V27 &
+    V28 &
+    V29
+>;
 export function record(...fields: ValueParser<any>[]) {
   return (context: Context) =>
     fields.reduce(

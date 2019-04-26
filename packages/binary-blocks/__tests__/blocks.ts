@@ -50,11 +50,11 @@ test("array", () => {
 
 test("array with reading length", () => {
   const { generate, parse } = compile(
-    record(field("vals", array({ of: uint8, length: uint8 })))
+    record(field("vals", array({ of: uint8, length: uint16be })))
   );
 
-  expect(parse(new Uint8Array([2, 10, 15]))).toEqual({ vals: [10, 15] });
-  expect(generate({ vals: [10, 15] }).toString()).toEqual("2,10,15");
+  expect(parse(new Uint8Array([0, 2, 10, 15]))).toEqual({ vals: [10, 15] });
+  expect(generate({ vals: [10, 15] }).toString()).toEqual("0,2,10,15");
 });
 
 test("transformed array", () => {
