@@ -7,7 +7,7 @@ import {
   uint32be,
   skip,
   transform,
-  writeOnly
+  array
 } from "@darkages/binary-blocks";
 import { string8, direction } from "../shared";
 
@@ -31,16 +31,18 @@ export const npcType = transform(
  * Packet ID 0x07
  */
 export default compile(
-  record(
-    writeOnly(uint16be, 1),
-    field("x", uint16be),
-    field("y", uint16be),
-    field("id", uint32be),
-    field("sprite", uint16be),
-    skip(4),
-    field("direction", direction),
-    skip(),
-    field("type", npcType),
-    field("name", string8)
-  )
+  array({
+    length: uint16be,
+    of: record(
+      field("x", uint16be),
+      field("y", uint16be),
+      field("id", uint32be),
+      field("sprite", uint16be),
+      skip(4),
+      field("direction", direction),
+      skip(),
+      field("type", npcType),
+      field("name", string8)
+    )
+  })
 );
