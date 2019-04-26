@@ -21,7 +21,7 @@ const displayUser = compile(
       field("direction", direction),
       field("id", uint32be),
       field("helmet", uint16be),
-      field("bodyAndGender", uint8),
+      field("pantsAndGender", uint8),
       field("arms", uint16be),
       field("boots", uint8),
       field("armor", uint16be),
@@ -47,21 +47,21 @@ const displayUser = compile(
       field("groupName", string8)
     ),
     function(val) {
-      const { arms, bodyAndGender, ...output } = val;
+      const { arms, pantsAndGender, ...output } = val;
 
-      const isFemale = bodyAndGender >= 32;
+      const isFemale = pantsAndGender >= 32;
 
       return {
         ...output,
         gender: isFemale ? ("w" as "w") : ("m" as "m"),
-        body: bodyAndGender - (isFemale ? 32 : 16)
+        pants: pantsAndGender - (isFemale ? 32 : 16)
       };
     },
     function(val) {
       return {
         ...val,
         arms: val.armor,
-        bodyAndGender: (val.gender === "m" ? 16 : 32) + val.body
+        pantsAndGender: (val.gender === "m" ? 16 : 32) + val.pants
       };
     }
   )

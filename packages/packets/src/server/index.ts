@@ -26,5 +26,6 @@ export { default as setLocation } from "./setLocation";
 export { default as showAnimation } from "./showAnimation";
 export { default as showDialog } from "./showDialog";
 export { default as showHealthBar } from "./showHealthBar";
+export { default as showNpc } from "./showNpc";
 export { default as systemMessage } from "./systemMessage";
 export { default as tickHeartbeatRequest } from "./tickHeartbeatRequest";

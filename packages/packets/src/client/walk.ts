@@ -1,10 +1,4 @@
-import {
-  compile,
-  record,
-  field,
-  uint8,
-  transform
-} from "@darkages/binary-blocks";
+import { compile, record, field } from "@darkages/binary-blocks";
 import { direction } from "../shared";
 
 /**
