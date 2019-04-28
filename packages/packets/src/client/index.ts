@@ -25,6 +25,7 @@ export { default as createCharacterA } from "./createCharacterA";
 export { default as look } from "./look";
 export { default as walk } from "./walk";
 export { default as createCharacterB } from "./createCharacterB";
+export { default as mapPointClick } from "./mapPointClick";
 export { default as pickupItem } from "./pickupItem";
 export { default as whisper } from "./whisper";
 export { default as dropGold } from "./dropGold";

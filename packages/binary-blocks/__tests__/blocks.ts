@@ -144,8 +144,6 @@ test("boolean", () => {
 test("constant field", () => {
   const { generate, parse } = compile(record(field("value", "output")));
 
-  console.info(parse + "");
-
   expect(parse(new Uint8Array([]))).toEqual({ value: "output" });
 
   expect(generate({ value: "output" }).toString()).toEqual("");
