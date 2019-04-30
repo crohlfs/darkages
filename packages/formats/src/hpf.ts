@@ -12,6 +12,7 @@ export function decompress(hpfBytes: Uint8Array) {
     int_odd.push(base);
     int_even.push(base + 1);
     byte_pair[base] = i;
+    byte_pair[base + 1] = i;
   }
 
   const result = [];
