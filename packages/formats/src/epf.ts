@@ -31,7 +31,7 @@ export function load(epf: Uint8Array) {
     //     (epf[offset + 15] << 24)) +
     //   0x0c;
 
-    const bytes = epf.slice(start, start + height * width);
+    const bytes = epf.subarray(start, start + height * width);
 
     frames.push({ top, left, width, height, bytes });
   }

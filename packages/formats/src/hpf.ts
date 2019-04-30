@@ -3,15 +3,15 @@ export function decompress(hpfBytes: Uint8Array) {
   var val = 0;
   var l = 0;
 
-  var int_odd = new Array<number>(256);
-  var int_even = new Array<number>(256);
+  var int_odd: number[] = [];
+  var int_even: number[] = [];
   var byte_pair = new Array<number>(513);
 
   for (let i = 0; i < 256; i++) {
-    int_odd[i] = 2 * i + 1;
-    int_even[i] = 2 * i + 2;
-    byte_pair[i * 2 + 1] = i & 0xff;
-    byte_pair[i * 2 + 2] = i & 0xff;
+    const base = 2 * i + 1;
+    int_odd.push(base);
+    int_even.push(base + 1);
+    byte_pair[base] = i;
   }
 
   const result = [];

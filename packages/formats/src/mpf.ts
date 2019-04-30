@@ -102,7 +102,7 @@ export function load(mpf: Uint8Array) {
 
     if (height > 0 && width > 0) {
       const frameDataOffset = dataStart + startAddress;
-      const bytes = mpf.slice(
+      const bytes = mpf.subarray(
         frameDataOffset,
         frameDataOffset + height * width
       );
