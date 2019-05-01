@@ -20,6 +20,7 @@ export { default as removeItem } from "./removeItem";
 export { default as removeSkill } from "./removeSkill";
 export { default as removeSpell } from "./removeSpell";
 export { default as serverListData } from "./serverListData";
+export { default as setDoor } from "./setDoor";
 export { default as setEntityDirection } from "./setEntityDirection";
 export { default as setPlayerEntityId } from "./setPlayerEntityId";
 export { default as setLocation } from "./setLocation";
