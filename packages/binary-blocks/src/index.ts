@@ -57,18 +57,18 @@ const createUintParser = (
     context.output +
     " = " +
     keys
-      .map(i => `data[offset++]${i === 0 ? "" : ` * 2 ** ${8 * i}`}`)
+      .map(i => `data[offset++]${i === 0 ? "" : ` * ${2 ** (8 * i)}`}`)
       .join(" + ") +
     ";";
 
   const put = `
 let ${valueVariable} = ${context.input};
 ${keys
-  .map(
-    i => `data[offset${i > 0 ? ` + ${i}` : ""}] = ${valueVariable};
+    .map(
+      i => `data[offset${i > 0 ? ` + ${i}` : ""}] = ${valueVariable};
 ${valueVariable} = ${valueVariable} >>> 8;`
-  )
-  .join("\r\n")}
+    )
+    .join("\r\n")}
 offset += ${bytes};`;
 
   return {
@@ -93,7 +93,7 @@ export const uint32le: ValueParser<number> = context =>
   createUintParser(context, 4, "little");
 
 export const int8: ValueParser<number> = context => {
-  const uintParser = createUintParser(context, 1, "big");
+  const uintParser = uint8(context);
   const valueVariable = context.availableVariables.shift()!;
 
   return {
@@ -107,7 +107,7 @@ export const int8: ValueParser<number> = context => {
 };
 
 export const int16be: ValueParser<number> = context => {
-  const uintParser = createUintParser(context, 2, "big");
+  const uintParser = uint16be(context);
   const valueVariable = context.availableVariables.shift()!;
 
   return {
@@ -119,7 +119,7 @@ ${context.output} = ${valueVariable} | (${valueVariable} & 2 ** 15) * 0x1fffe;`,
 };
 
 export const int16le: ValueParser<number> = context => {
-  const uintParser = createUintParser(context, 2, "little");
+  const uintParser = uint16le(context);
   const valueVariable = context.availableVariables.shift()!;
 
   return {
@@ -131,7 +131,7 @@ ${context.output} = ${valueVariable} | (${valueVariable} & 2 ** 15) * 0x1fffe;`,
 };
 
 export const int32be: ValueParser<number> = context => {
-  const uintParser = createUintParser(context, 4, "big");
+  const uintParser = uint32be(context);
 
   return {
     get: `${
@@ -142,7 +142,7 @@ export const int32be: ValueParser<number> = context => {
 };
 
 export const int32le: ValueParser<number> = context => {
-  const uintParser = createUintParser(context, 4, "little");
+  const uintParser = uint32le(context);
 
   return {
     get: `${
@@ -229,9 +229,13 @@ export const array = <Value>(opts: {
 
     const get = `
 const ${arrayVariable} = [];
-${lengthParser ? lengthParser.get : `const ${lengthVariable} = ${opts.length};`}
+${
+      lengthParser
+        ? `let ${lengthVariable};\r\n${lengthParser.get}`
+        : `const ${lengthVariable} = ${opts.length};`
+    }
 for (let i = 0; i < ${lengthVariable}; i++) {
-  let ${lengthVariable};
+  let ${itemVariable};
   ${itemParser.get}
   ${arrayVariable}.push(${itemVariable});
 }
@@ -239,13 +243,13 @@ ${context.output} = ${arrayVariable}`;
 
     const put = `
 ${
-  lengthParser
-    ? `
+      lengthParser
+        ? `
 const ${lengthVariable} = ${context.input}.length;
 ${lengthParser.put}
 `
-    : ""
-}
+        : ""
+    }
 for (const ${itemVariable} of ${context.input}) {
   ${itemParser.put}
 }
@@ -1534,17 +1538,28 @@ export function record<
     V29
 >;
 export function record(...fields: ValueParser<any>[]) {
-  return (context: Context) =>
-    fields.reduce(
+  return (context: Context) => {
+    const throwawayVariable = context.availableVariables.shift()!;
+
+    const result = fields.reduce(
       (result, f) => {
-        const field = f(context);
+        const field = f({
+          ...context,
+          output: throwawayVariable
+        });
         return {
           get: result.get + field.get + "\r\n",
           put: result.put + field.put + "\r\n"
         };
       },
-      { get: `${context.output} = {};`, put: "" }
+      { get: `const ${throwawayVariable} = {};`, put: "" }
     );
+
+    return {
+      ...result,
+      get: result.get + `\r\n${context.output} = ${throwawayVariable};`
+    };
+  };
 }
 
 export function compile<Shape>(objectParser: ValueParser<Shape>) {

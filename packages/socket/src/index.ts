@@ -73,7 +73,7 @@ export default class DarkagesSocket {
   }
 
   write(data: Uint8Array) {
-    return new Promise<void>(resolve => {
+    return new Promise<Error | undefined>(resolve => {
       this.socket.write(
         Buffer.concat(
           [Uint8Array.from([0xaa, data.length >> 8, data.length]), data],
