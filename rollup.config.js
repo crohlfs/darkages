@@ -18,7 +18,9 @@ export default (pkg, create) =>
       ...Object.keys(pkg.peerDependencies || {})
     ],
     plugins: [
-      resolve({ extensions: [".ts"] }),
-      babel({ extensions: [".js", ".ts"] })
+      resolve({
+        extensions: [".ts", ".js"]
+      }),
+      babel({ extensions: [".ts"] })
     ]
   });

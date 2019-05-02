@@ -64,11 +64,11 @@ const createUintParser = (
   const put = `
 let ${valueVariable} = ${context.input};
 ${keys
-    .map(
-      i => `data[offset${i > 0 ? ` + ${i}` : ""}] = ${valueVariable};
+  .map(
+    i => `data[offset${i > 0 ? ` + ${i}` : ""}] = ${valueVariable};
 ${valueVariable} = ${valueVariable} >>> 8;`
-    )
-    .join("\r\n")}
+  )
+  .join("\r\n")}
 offset += ${bytes};`;
 
   return {
@@ -230,10 +230,10 @@ export const array = <Value>(opts: {
     const get = `
 const ${arrayVariable} = [];
 ${
-      lengthParser
-        ? `let ${lengthVariable};\r\n${lengthParser.get}`
-        : `const ${lengthVariable} = ${opts.length};`
-    }
+  lengthParser
+    ? `let ${lengthVariable};\r\n${lengthParser.get}`
+    : `const ${lengthVariable} = ${opts.length};`
+}
 for (let i = 0; i < ${lengthVariable}; i++) {
   let ${itemVariable};
   ${itemParser.get}
@@ -243,13 +243,13 @@ ${context.output} = ${arrayVariable}`;
 
     const put = `
 ${
-      lengthParser
-        ? `
+  lengthParser
+    ? `
 const ${lengthVariable} = ${context.input}.length;
 ${lengthParser.put}
 `
-        : ""
-    }
+    : ""
+}
 for (const ${itemVariable} of ${context.input}) {
   ${itemParser.put}
 }

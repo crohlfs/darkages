@@ -9,33 +9,26 @@ import {
 const statType = transform(
   uint8,
   function(value) {
-    switch (value) {
-      case 2:
-        return "DEX" as "DEX";
-      case 4:
-        return "INT" as "INT";
-      case 8:
-        return "WIS" as "WIS";
-      case 16:
-        return "CON" as "CON";
-      case 1:
-      default:
-        return "STR" as "STR";
-    }
+    return value === 2
+      ? ("DEX" as "DEX")
+      : value === 4
+      ? ("INT" as "INT")
+      : value === 8
+      ? ("WIS" as "WIS")
+      : value === 16
+      ? ("CON" as "CON")
+      : ("STR" as "STR");
   },
   function(stat) {
-    switch (stat) {
-      case "STR":
-        return 1;
-      case "DEX":
-        return 2;
-      case "INT":
-        return 4;
-      case "WIS":
-        return 8;
-      case "CON":
-        return 16;
-    }
+    return stat === "STR"
+      ? 1
+      : stat === "DEX"
+      ? 2
+      : stat === "INT"
+      ? 4
+      : stat === "WIS"
+      ? 8
+      : 16;
   }
 );
 
