@@ -9,6 +9,7 @@ export default createConfig(pkg, base => ({
     format: "iife",
     name: "default",
     compact: true,
+    freeze: false,
     extend: true
   },
   external: [],
