@@ -261,13 +261,9 @@ for (const ${itemVariable} of ${context.input}) {
     };
   }) as ValueParser<Value[]>;
 
-export const string = (
-  length: ValueParser<number>,
-  encoding: string = "utf8"
-) =>
+export const bytes = (length: ValueParser<ArrayBuffer>) =>
   (context => {
     const lengthVariable = context.availableVariables.shift()!;
-    const outputTempVariable = context.availableVariables.shift()!;
 
     const lengthContext = {
       ...context,
@@ -277,20 +273,18 @@ export const string = (
     const { get: getLength, put: setLength } = length(lengthContext);
 
     const get = `
-let ${lengthVariable};
-${getLength}
-${context.output}
-  = new TextDecoder("${encoding}").decode(data.slice(offset, offset += ${lengthVariable}));`;
+  let ${lengthVariable};
+  ${getLength}
+  ${context.output}
+    = data.slice(offset, offset += ${lengthVariable});`;
 
     const put = `
-const ${lengthVariable} = ${context.input}.length;
-${setLength}
-const ${outputTempVariable}
-  = Buffer.from(${context.input}, "ascii");
-
-data.set(${outputTempVariable}, offset);
-offset += ${context.input}.length;
-  `;
+  const ${lengthVariable} = ${context.input}.length;
+  ${setLength}
+  
+  data.set(${context.input}, offset);
+  offset += ${context.input}.length;
+    `;
 
     return {
       get,
