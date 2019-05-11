@@ -264,7 +264,6 @@ export const bytes = (length: number | ValueParser<number>) =>
     }
 
     const get = `
-  let ${lengthVariable};
   ${
     lengthParser
       ? `let ${lengthVariable};\r\n${lengthParser.get}`
@@ -290,7 +289,7 @@ export const bytes = (length: number | ValueParser<number>) =>
       get,
       put
     };
-  }) as ValueParser<string>;
+  }) as ValueParser<number[]>;
 
 export const pipeToVariable = <Input>(
   context: Context,
