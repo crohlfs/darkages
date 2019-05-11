@@ -86,7 +86,7 @@ if (${context.input}.type === "item") {
             type: "npc";
             sprite: number;
             direction: "up" | "right" | "down" | "left";
-            npcType: string;
+            npcType: "monster" | "nonSolidMonster" | "npc";
             name: string;
           }
         | { type: "item"; sprite: number }
