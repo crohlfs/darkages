@@ -1,9 +1,9 @@
-export type ValueParser<Value> = (
-  context: Context
-) => {
+interface ParserCode {
   get: string;
   put: string;
-};
+}
+
+export type ValueParser<Value> = (context: Context) => ParserCode;
 
 const getFunctionBody = (funcString: string) => {
   return funcString.slice(
@@ -170,13 +170,7 @@ export function writeOnly<V extends string | number>(
   value: V
 ): ValueParser<{}> {
   return context => {
-    const throwawayVariable = context.availableVariables.shift()!;
-
-    const writerParser = writer({
-      ...context,
-      input: throwawayVariable,
-      output: throwawayVariable
-    });
+    const [throwawayVariable, writerParser] = pipeToVariable(context, writer);
 
     return {
       get: `
@@ -208,12 +202,7 @@ export const array = <Value>(opts: {
   of: ValueParser<Value>;
 }) =>
   (context => {
-    const itemVariable = context.availableVariables.shift()!;
-    const itemParser = opts.of({
-      ...context,
-      input: itemVariable,
-      output: itemVariable
-    });
+    const [itemVariable, itemParser] = pipeToVariable(context, opts.of);
 
     const arrayVariable = context.availableVariables.shift()!;
     const lengthVariable = context.availableVariables.shift()!;
@@ -266,25 +255,18 @@ export const string = (
   encoding: string = "utf8"
 ) =>
   (context => {
-    const lengthVariable = context.availableVariables.shift()!;
+    const [lengthVariable, lengthParser] = pipeToVariable(context, length);
     const outputTempVariable = context.availableVariables.shift()!;
-
-    const lengthContext = {
-      ...context,
-      input: lengthVariable,
-      output: lengthVariable
-    };
-    const { get: getLength, put: setLength } = length(lengthContext);
 
     const get = `
 let ${lengthVariable};
-${getLength}
+${lengthParser.get}
 ${context.output}
   = new TextDecoder("${encoding}").decode(data.slice(offset, offset += ${lengthVariable}));`;
 
     const put = `
 const ${lengthVariable} = ${context.input}.length;
-${setLength}
+${lengthParser.put}
 const ${outputTempVariable}
   = Buffer.from(${context.input}, "ascii");
 
@@ -298,19 +280,28 @@ offset += ${context.input}.length;
     };
   }) as ValueParser<string>;
 
+export const pipeToVariable = <Input>(
+  context: Context,
+  v: ValueParser<Input>
+) => {
+  const variable = context.availableVariables.shift()!;
+
+  const parser = v({
+    ...context,
+    input: variable,
+    output: variable
+  });
+
+  return [variable, parser] as [string, ParserCode];
+};
+
 export const transform = <Input, Output>(
   v: ValueParser<Input>,
   to: (val: Input) => Output,
   from: (val: Output) => Input
 ) =>
   (context => {
-    const valueVariable = context.availableVariables.shift()!;
-
-    const valueParser = v({
-      ...context,
-      input: valueVariable,
-      output: valueVariable
-    });
+    const [valueVariable, valueParser] = pipeToVariable(context, v);
 
     const get = `
 let ${valueVariable};
