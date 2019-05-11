@@ -250,19 +250,37 @@ for (const ${itemVariable} of ${context.input}) {
     };
   }) as ValueParser<Value[]>;
 
-export const bytes = (length: ValueParser<ArrayBuffer>) =>
+export const bytes = (length: number | ValueParser<number>) =>
   (context => {
-    const [lengthVariable, lengthParser] = pipeToVariable(context, length);
+    const lengthVariable = context.availableVariables.shift()!;
+
+    let lengthParser;
+    if (typeof length !== "number") {
+      lengthParser = length({
+        ...context,
+        input: lengthVariable,
+        output: lengthVariable
+      });
+    }
 
     const get = `
   let ${lengthVariable};
-  ${lengthParser.get}
-  ${context.output}
-    = data.slice(offset, offset += ${lengthVariable});`;
+  ${
+    lengthParser
+      ? `let ${lengthVariable};\r\n${lengthParser.get}`
+      : `const ${lengthVariable} = ${length};`
+  }
+  ${context.output} = data.slice(offset, offset += ${lengthVariable});`;
 
     const put = `
+  ${
+    lengthParser
+      ? `
   const ${lengthVariable} = ${context.input}.length;
   ${lengthParser.put}
+  `
+      : ""
+  }
   
   data.set(${context.input}, offset);
   offset += ${context.input}.length;
