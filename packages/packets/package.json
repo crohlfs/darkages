@@ -22,6 +22,7 @@
     "@darkages/binary-blocks": "^0.1.0"
   },
   "devDependencies": {
+    "prepack": "^0.2.54",
     "rollup-plugin-prepack-up": "^1.0.0"
   },
   "resolutions": {

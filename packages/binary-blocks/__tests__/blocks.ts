@@ -15,10 +15,10 @@ import {
   int16le,
   int32be,
   int32le,
-  string,
   boolean,
   skip,
-  writeOnly
+  writeOnly,
+  bytes
 } from "../src";
 
 Object.assign(global, { TextDecoder });
@@ -118,17 +118,19 @@ test("skip", () => {
   expect(generate({ id: 10 }).toString()).toEqual("0,0,10");
 });
 
-test("string", () => {
-  const { generate, parse } = compile(record(field("message", string(uint8))));
+test("bytes", () => {
+  const { generate, parse } = compile(record(field("vals", bytes(uint8))));
 
   expect(
     parse(
       new Uint8Array([11, 72, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100])
     )
-  ).toEqual({ message: "Hello world" });
-  expect(generate({ message: "Hello world" }).toString()).toEqual(
-    "11,72,101,108,108,111,32,119,111,114,108,100"
-  );
+  ).toEqual({ vals: [72, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100] });
+  expect(
+    generate({
+      vals: [72, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100]
+    }).toString()
+  ).toEqual("11,72,101,108,108,111,32,119,111,114,108,100");
 });
 
 test("boolean", () => {
@@ -170,8 +172,6 @@ test("complex", () => {
       field("port", uint16be),
       skip(),
       field("seed", uint8),
-      field("key", string(uint8, "euc-kr")),
-      field("name", string(uint8, "euc-kr")),
       field("id", uint32le)
     )
   );
@@ -180,8 +180,6 @@ test("complex", () => {
     ip: "51.10.121.11",
     port: 2610,
     seed: 7,
-    key: "okokDUDE",
-    name: "watsMyNAMEEEE",
     id: 5438993
   };
 

@@ -13,7 +13,7 @@ export default createConfig(pkg, base => ({
     extend: true
   },
   external: [],
-  plugins: [...base.plugins, prepack(pkg.main, { inlineExpressions: true })],
+  plugins: [...base.plugins, prepack()],
   input: "src/index.ts",
   treeshake: false
 }));

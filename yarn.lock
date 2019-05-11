@@ -5564,7 +5564,7 @@ prelude-ls@~1.1.2:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
   integrity sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=
 
-prepack@^0.2.36:
+prepack@^0.2.36, prepack@^0.2.54:
   version "0.2.54"
   resolved "https://registry.yarnpkg.com/prepack/-/prepack-0.2.54.tgz#ce2d610dc39731a68f16527053597a11b74ae153"
   integrity sha512-wu6j6J6h/TgpYNRS8tXEyprwul2WM2Zr+dSbc/o0O8cdhoOjvMy2T98WK2dhSNe+xyQ/SaqJpepWiCxS8EVjkA==

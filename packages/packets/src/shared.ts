@@ -1,4 +1,10 @@
-import { string, uint8, transform } from "@darkages/binary-blocks";
+import {
+  uint8,
+  transform,
+  bytes,
+  ValueParser,
+  uint16le
+} from "@darkages/binary-blocks";
 
 export function build<Shape>(
   parse: (data: Uint8Array) => Shape,
@@ -7,7 +13,19 @@ export function build<Shape>(
   return { parse, generate };
 }
 
-export const string8 = string(uint8, "euc-kr");
+const string = (size: number | ValueParser<number>) =>
+  transform(
+    bytes(size),
+    function(value: Uint8Array) {
+      return new TextDecoder("euc-kr").decode(value);
+    },
+    function(value: string) {
+      return Buffer.from(value, "ascii");
+    }
+  );
+
+export const string8 = string(uint8);
+export const string16 = string(uint16le);
 
 export const emptyPacketStructure = {
   parse: () => ({}),
