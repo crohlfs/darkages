@@ -1,6 +1,8 @@
-import { compile, record, field, uint8 } from "@darkages/binary-blocks";
+import { compile, record, field, uint8, skip } from "@darkages/binary-blocks";
 
 /**
  * Packet ID 0x05
  */
-export default compile(record(field("width", uint8), field("height", uint8)));
+export default compile(
+  record(skip(4), field("width", uint8), field("height", uint8))
+);
