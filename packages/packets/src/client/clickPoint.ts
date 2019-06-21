@@ -8,15 +8,11 @@ import {
 import { build } from "../shared";
 
 const entityStructure = compile(
-  record(field("type", "ENTITY" as "ENTITY"), field("entityId", uint32be))
+  record(field("type", "ENTITY"), field("entityId", uint32be))
 );
 
 const mapTileStructure = compile(
-  record(
-    field("type", "MAP_TILE" as "MAP_TILE"),
-    field("x", uint16be),
-    field("y", uint16be)
-  )
+  record(field("type", "MAP_TILE"), field("x", uint16be), field("y", uint16be))
 );
 
 /**

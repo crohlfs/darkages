@@ -17,6 +17,8 @@ export function decompress(hpfBytes: Uint8Array) {
 
   const result = [];
 
+  let num = 0;
+
   while (val !== 0x100) {
     val = 0;
 
@@ -67,8 +69,12 @@ export function decompress(hpfBytes: Uint8Array) {
       val -= 0x100000000;
     }
 
-    result.push(val);
+    if (num < 8) {
+      num++;
+    } else {
+      result.push(val);
+    }
   }
 
-  return new Uint8Array(result);
+  return result;
 }

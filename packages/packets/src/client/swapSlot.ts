@@ -16,11 +16,7 @@ export default compile(
       transform(
         uint8,
         function(value) {
-          return value === 1
-            ? ("SPELL" as "SPELL")
-            : value === 2
-            ? ("SKILL" as "SKILL")
-            : ("ITEM" as "ITEM");
+          return value === 1 ? "SPELL" : value === 2 ? "SKILL" : "ITEM";
         },
         function(value) {
           return value === "ITEM" ? 0 : value === "SPELL" ? 1 : 2;

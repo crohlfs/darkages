@@ -10,14 +10,14 @@ const statType = transform(
   uint8,
   function(value) {
     return value === 2
-      ? ("DEX" as "DEX")
+      ? "DEX"
       : value === 4
-      ? ("INT" as "INT")
+      ? "INT"
       : value === 8
-      ? ("WIS" as "WIS")
+      ? "WIS"
       : value === 16
-      ? ("CON" as "CON")
-      : ("STR" as "STR");
+      ? "CON"
+      : "STR";
   },
   function(stat) {
     return stat === "STR"

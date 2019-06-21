@@ -21,11 +21,7 @@ export default compile(
       transform(
         uint8,
         function(val) {
-          return val === 1
-            ? ("creature" as "creature")
-            : val === 2
-            ? ("item" as "item")
-            : ("reactor" as "reactor");
+          return val === 1 ? "creature" : val === 2 ? "item" : "reactor";
         },
         function(val) {
           return val === "creature" ? 1 : val === "item" ? 2 : 4;

@@ -11,7 +11,7 @@ import { string8, build } from "../shared";
 
 const okStructure = compile(
   record(
-    field("versionMatch", "OK" as "OK"),
+    field("versionMatch", "OK"),
     field("serverTableChecksum", uint32be),
     field("seed", uint8),
     field("encryptionKey", array({ of: uint8, length: uint8 }))
@@ -20,7 +20,7 @@ const okStructure = compile(
 
 const tooLowStructure = compile(
   record(
-    field("versionMatch", "TOO_LOW" as "TOO_LOW"),
+    field("versionMatch", "TOO_LOW"),
     field("expectedVersion", uint16be),
     field("patchUrl", string8)
   )
@@ -33,7 +33,7 @@ export default build(
   data => {
     switch (data[0]) {
       case 1:
-        return { versionMatch: "TOO_HIGH" as "TOO_HIGH" };
+        return { versionMatch: "TOO_HIGH" as const };
       case 2:
         return tooLowStructure.parse(data.subarray(1));
       default:

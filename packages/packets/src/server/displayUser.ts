@@ -53,7 +53,7 @@ const displayUser = compile(
 
       return {
         ...output,
-        gender: isFemale ? ("w" as "w") : ("m" as "m"),
+        gender: isFemale ? ("w" as const) : ("m" as const),
         pants: pantsAndGender - (isFemale ? 32 : 16)
       };
     },

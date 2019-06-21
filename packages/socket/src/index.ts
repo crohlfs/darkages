@@ -51,12 +51,9 @@ export default class DarkagesSocket {
     var socket = new Socket();
 
     return new Promise<DarkagesSocket>(resolve => {
-      socket.connect(
-        opts,
-        () => {
-          resolve(new DarkagesSocket(socket));
-        }
-      );
+      socket.connect(opts, () => {
+        resolve(new DarkagesSocket(socket));
+      });
     });
   }
 

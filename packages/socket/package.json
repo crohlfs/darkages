@@ -18,5 +18,8 @@
     "test": "echo \"Error: run tests from root\" && exit 1",
     "build": "rollup -c",
     "watch": "rollup -cw"
+  },
+  "dependencies": {
+    "buffer-collection": "^2.0.3"
   }
 }
