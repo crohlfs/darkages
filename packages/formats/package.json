@@ -19,6 +19,6 @@
     "watch": "rollup -cw"
   },
   "dependencies": {
-    "buffer-collection": "^2.0.3"
+    "buffer-collection": "^3.0.0"
   }
 }

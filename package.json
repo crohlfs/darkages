@@ -10,22 +10,22 @@
     "tsc": "lerna exec tsc"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.4",
-    "@babel/plugin-proposal-class-properties": "^7.4.4",
-    "@babel/plugin-transform-modules-commonjs": "^7.4.4",
-    "@babel/preset-typescript": "^7.3.3",
-    "@types/jest": "^24.0.12",
-    "babel-jest": "^24.7.1",
-    "babel-plugin-preval": "^3.0.1",
+    "@babel/core": "^7.7.2",
+    "@babel/plugin-proposal-class-properties": "^7.7.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.7.0",
+    "@babel/preset-typescript": "^7.7.2",
+    "@types/jest": "^24.0.23",
+    "babel-jest": "^24.9.0",
+    "babel-plugin-preval": "^4.0.0",
     "babel-plugin-transform-commonjs-es2015-modules": "^4.0.1",
-    "jest": "^24.7.1",
-    "lerna": "^3.13.4",
-    "rollup": "^1.10.1",
-    "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-commonjs": "^9.3.4",
+    "jest": "^24.9.0",
+    "lerna": "^3.19.0",
+    "rollup": "^1.27.3",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-multi-entry": "^2.1.0",
-    "rollup-plugin-node-resolve": "^4.2.3",
-    "typescript": "^3.5.2"
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "typescript": "^3.7.2"
   },
   "resolutions": {
     "babel-core": "^7.0.0-bridge.0"

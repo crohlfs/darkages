@@ -1,6 +1,6 @@
 // copying this https://github.com/mozilla/libdweb#tcpsocket-api
 import { Socket, SocketConnectOpts } from "net";
-const BufferCollection = require("buffer-collection");
+import { BufferCollection } from "buffer-collection";
 
 const HEADER_SIZE = 3;
 

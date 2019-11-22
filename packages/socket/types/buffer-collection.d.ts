@@ -1,7 +1,5 @@
 declare module "buffer-collection" {
-  export = BufferCollection;
-
-  class BufferCollection extends Buffer {
+  export class BufferCollection extends Buffer {
     constructor();
 
     push(buff: Buffer): any;
