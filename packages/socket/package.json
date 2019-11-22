@@ -21,5 +21,6 @@
   },
   "dependencies": {
     "buffer-collection": "^3.0.0"
-  }
+  },
+  "gitHead": "53252c1f60daaf58add2656a37d0e1c34e8caff8"
 }

@@ -28,5 +28,6 @@
   "resolutions": {
     "prepack": "^0.2.54",
     "fbjs": "^1.0.0"
-  }
+  },
+  "gitHead": "53252c1f60daaf58add2656a37d0e1c34e8caff8"
 }
