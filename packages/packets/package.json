@@ -5,7 +5,7 @@
   "keywords": [
     "darkages"
   ],
-  "version": "0.1.4",
+  "version": "0.1.5",
   "license": "MIT",
   "repository": "crohlfs/darkages",
   "main": "lib/index.js",
@@ -19,7 +19,7 @@
     "watch": "rollup -cw"
   },
   "dependencies": {
-    "@darkages/binary-blocks": "^0.1.4"
+    "@darkages/binary-blocks": "^0.1.5"
   },
   "devDependencies": {
     "prepack": "^0.2.54",
@@ -29,5 +29,5 @@
     "prepack": "^0.2.54",
     "fbjs": "^1.0.0"
   },
-  "gitHead": "53252c1f60daaf58add2656a37d0e1c34e8caff8"
+  "gitHead": "f34051a347704ef9fac74a787e8b828c7c8d9fed"
 }
