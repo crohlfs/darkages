@@ -20,7 +20,7 @@
     "watch": "rollup -cw"
   },
   "dependencies": {
-    "buffer-collection": "^3.0.0"
+    "buffer-collection": "^3.0.1"
   },
   "gitHead": "f34051a347704ef9fac74a787e8b828c7c8d9fed"
 }
